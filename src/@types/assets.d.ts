@@ -1,8 +1,5 @@
 declare module "*.svg" {
-  const content: any;
-  export default content;
+	const content: any
+	export default content
 }
-declare module "*.scss" {
-  const content: any;
-  export default content;
-}
+declare module "react-world-flags"

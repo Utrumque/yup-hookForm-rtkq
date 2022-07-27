@@ -1,9 +1,11 @@
-import * as React from "react"
+import React, { useEffect } from "react"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { schema } from "./schema"
 import { useForm, Controller, SubmitHandler } from "react-hook-form"
 
 import { AddRowProps } from "./types"
+import { usePostUserMutation } from "../../services/infiniteScrollAPI"
+import { IUser } from "../../models/IUser"
 
 import PhoneInput from "react-phone-input-2"
 import "react-phone-input-2/lib/style.css"
@@ -27,10 +29,11 @@ import { VisibilityOff } from "@mui/icons-material"
 import { LoadingButton } from "@mui/lab"
 import SendIcon from "@mui/icons-material/Send"
 
-import { usePostUserMutation } from "../../services/infiniteScrollAPI"
-import { IUser } from "../../models/IUser"
+import { useTranslation } from "react-i18next"
 
-export const AddRow: React.FC<AddRowProps> = React.memo(({ setData }) => {
+export const ModalForm: React.FC<AddRowProps> = React.memo(({ setData }) => {
+	const { t } = useTranslation()
+
 	const [open, setOpen] = React.useState(false)
 	const [showPassword, setShowPassword] = React.useState<Boolean>(false)
 	const [postUser, { isLoading: loading, isSuccess }] = usePostUserMutation()
@@ -77,12 +80,8 @@ export const AddRow: React.FC<AddRowProps> = React.memo(({ setData }) => {
 
 	return (
 		<>
-			<Button
-				variant='outlined'
-				onClick={handleOpen}
-				sx={{ left: "50%", transform: "translateX(-50%)", m: 1 }}
-			>
-				Open post form
+			<Button variant='outlined' onClick={handleOpen}>
+				{t("openPostForm")}
 			</Button>
 			<Modal
 				open={open}
@@ -112,7 +111,7 @@ export const AddRow: React.FC<AddRowProps> = React.memo(({ setData }) => {
 										<TextField
 											{...field}
 											id='outlined-basic-iban'
-											label='IBAN'
+											label={t("iban")}
 											type='iban'
 											error={!!errors.iban}
 											helperText={errors.iban ? errors.iban?.message : ""}
@@ -130,7 +129,7 @@ export const AddRow: React.FC<AddRowProps> = React.memo(({ setData }) => {
 										<TextField
 											{...field}
 											id='outlined-basic-fullName'
-											label='Full Name'
+											label={t("fullName")}
 											type='fullName'
 											error={!!errors.fullName}
 											helperText={errors.fullName ? errors.fullName?.message : ""}
@@ -148,7 +147,7 @@ export const AddRow: React.FC<AddRowProps> = React.memo(({ setData }) => {
 										<TextField
 											{...field}
 											id='outlined-basic-city'
-											label='City'
+											label={t("city")}
 											type='city'
 											error={!!errors.city}
 											helperText={errors.city ? errors.city?.message : ""}
@@ -166,7 +165,7 @@ export const AddRow: React.FC<AddRowProps> = React.memo(({ setData }) => {
 										<TextField
 											{...field}
 											id='outlined-basic-email'
-											label='Email'
+											label={t("email")}
 											type='email'
 											error={!!errors.email}
 											helperText={errors.email ? errors.email?.message : ""}
@@ -177,7 +176,7 @@ export const AddRow: React.FC<AddRowProps> = React.memo(({ setData }) => {
 							</Grid>
 							<Grid item xs={4}>
 								<FormControl variant='outlined' error={!!errors.password}>
-									<InputLabel htmlFor='outlined-adornment-password'>Password</InputLabel>
+									<InputLabel htmlFor='outlined-adornment-password'>{t("password")}</InputLabel>
 									<Controller
 										control={control}
 										name='password'
@@ -187,7 +186,7 @@ export const AddRow: React.FC<AddRowProps> = React.memo(({ setData }) => {
 												{...field}
 												id='outlined-adornment-password'
 												type={showPassword ? "text" : "password"}
-												label='Password'
+												label={t("password")}
 												disabled={loading}
 												endAdornment={
 													<InputAdornment position='end'>
@@ -237,7 +236,7 @@ export const AddRow: React.FC<AddRowProps> = React.memo(({ setData }) => {
 							loadingPosition='end'
 							variant='contained'
 						>
-							Post
+							{t("post")}
 						</LoadingButton>
 					</Box>
 				</Grow>

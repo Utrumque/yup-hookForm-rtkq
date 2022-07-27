@@ -8,14 +8,19 @@ import TableContainer from "@mui/material/TableContainer"
 import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
-import { Typography } from "@mui/material"
+import { Box, Typography } from "@mui/material"
 
-import { AddRow } from "../ModalForm"
+import { ModalForm } from "../ModalForm"
 import { IUser } from "../../models/IUser"
 
 import { useGetUsersQuery, useGetAllUsersQuery } from "../../services/infiniteScrollAPI"
 
+import { useTranslation } from "react-i18next"
+import { Changelang } from "../Changelang"
+
 export const DataTable: React.FC = React.memo(() => {
+	const { t } = useTranslation()
+
 	const [page, setPage] = useState(1)
 	const [data, setData] = useState<IUser[] | []>([])
 	const { data: users, error, isLoading: loading } = useGetUsersQuery(page)
@@ -61,17 +66,20 @@ export const DataTable: React.FC = React.memo(() => {
 
 	return (
 		<>
-			<AddRow setData={setData} />
+			<Box sx={{ display: "flex", alignItems: "center", mb: 1, justifyContent: "space-between" }}>
+				<Changelang />
+				<ModalForm setData={setData} />
+			</Box>
 			<TableContainer component={Paper}>
 				<Table sx={{ minWidth: 700 }} aria-label='customized table'>
 					<TableHead>
 						<TableRow>
-							<StyledTableCell>IBAN</StyledTableCell>
-							<StyledTableCell align='right'>Full Name</StyledTableCell>
-							<StyledTableCell align='right'>City</StyledTableCell>
-							<StyledTableCell align='right'>Email</StyledTableCell>
-							<StyledTableCell align='right'>Password</StyledTableCell>
-							<StyledTableCell align='right'>Phone</StyledTableCell>
+							<StyledTableCell>{t("iban")}</StyledTableCell>
+							<StyledTableCell align='right'>{t("fullName")}</StyledTableCell>
+							<StyledTableCell align='right'>{t("city")}</StyledTableCell>
+							<StyledTableCell align='right'>{t("email")}</StyledTableCell>
+							<StyledTableCell align='right'>{t("password")}</StyledTableCell>
+							<StyledTableCell align='right'>{t("phone")}</StyledTableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -99,7 +107,7 @@ export const DataTable: React.FC = React.memo(() => {
 							transform: "translateX(-50%)",
 						}}
 					>
-						Идет загрузка...
+						{t("loading")}
 					</Typography>
 				)}
 				{error && (
@@ -112,7 +120,7 @@ export const DataTable: React.FC = React.memo(() => {
 							transform: "translateX(-50%)",
 						}}
 					>
-						Произошла ошибка при загрузке!
+						{t("error")}
 					</Typography>
 				)}
 			</TableContainer>
